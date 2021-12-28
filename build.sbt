@@ -1,3 +1,5 @@
+import ReleaseTransformations._
+
 scalaVersion := "2.13.7"
 version := "0.1.0-SNAPSHOT"
 
@@ -21,3 +23,16 @@ assemblyMergeStrategy := {
         val oldStrategy = assemblyMergeStrategy.value
         oldStrategy(x)
 }
+
+releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    setNextVersion,
+    commitNextVersion,
+    pushChanges,
+)
