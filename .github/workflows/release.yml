@@ -1,0 +1,20 @@
+name: Release JAR
+on: [push]
+jobs:
+  release-jar:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+    - name: Build
+      run: sbt assembly
+    - name: Upload JAR
+      uses: actions/upload-artifact@v2
+      with:
+        name: jar
+        path: target/scala-*/debezium-avro-schema-export-assembly*.jar
