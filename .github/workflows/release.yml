@@ -1,5 +1,7 @@
 name: Release JAR
-on: [push]
+on:
+  push:
+    tags: ['*']
 jobs:
   release-jar:
     runs-on: ubuntu-latest
@@ -13,8 +15,8 @@ jobs:
         java-version: 11
     - name: Build
       run: sbt assembly
-    - name: Upload JAR
-      uses: actions/upload-artifact@v2
+    - name: Create Release
+      uses: ncipollo/release-action@v1
       with:
-        name: jar
-        path: target/scala-*/debezium-avro-schema-export-assembly*.jar
+        artifacts: target/scala-2.13/debezium-avro-schema-export-assembly*.jar
+        token: ${{ secrets.GITHUB_TOKEN }}
