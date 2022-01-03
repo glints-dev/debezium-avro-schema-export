@@ -1,7 +1,6 @@
 import ReleaseTransformations._
 
 scalaVersion := "2.13.7"
-version := "0.1.0-SNAPSHOT"
 
 val confluentVersion = "6.2.2"
 val debeziumVersion = "1.7.2.Final"
