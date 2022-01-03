@@ -56,9 +56,13 @@ object DebeziumAvroSchemaExport {
     val avroData = new AvroData(new AvroDataConfig(config.asMap()))
 
     for (tid <- schema.tableIds().asScala) {
-      val avroSchema =
+      val avroKeySchema =
+        avroData.fromConnectSchema(schema.schemaFor(tid).keySchema())
+      println(avroKeySchema.toString(false))
+
+      val avroValueSchema =
         avroData.fromConnectSchema(schema.schemaFor(tid).valueSchema())
-      println(avroSchema.toString(false))
+      println(avroValueSchema.toString(false))
     }
   }
 
