@@ -11,6 +11,7 @@ resolvers += "Confluent Repository" at "https://packages.confluent.io/maven/"
 
 libraryDependencies += "io.confluent" % "kafka-connect-avro-converter" % confluentVersion
 libraryDependencies += "io.confluent" % "kafka-connect-avro-data" % confluentVersion
+libraryDependencies += "io.confluent" % "kafka-schema-serializer" % confluentVersion
 libraryDependencies += "io.debezium" % "debezium-core" % debeziumVersion
 libraryDependencies += "io.debezium" % "debezium-connector-postgres" % debeziumVersion
 libraryDependencies += "org.apache.kafka" % "connect-api" % kafkaVersion

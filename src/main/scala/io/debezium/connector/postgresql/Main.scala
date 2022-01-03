@@ -7,7 +7,9 @@ import scala.io.Source.fromURL
 import scala.jdk.CollectionConverters._
 import scala.util.{Failure, Success, Try}
 
-import io.confluent.connect.avro.{AvroData, AvroDataConfig};
+import io.confluent.connect.avro.{AvroData, AvroDataConfig}
+import io.confluent.kafka.schemaregistry.avro.AvroSchema
+import io.confluent.kafka.serializers.subject.TopicNameStrategy
 import io.debezium.config.Configuration
 import io.debezium.connector.postgresql.connection.PostgresConnection
 import io.debezium.connector.postgresql.connection.PostgresConnection.PostgresValueConverterBuilder
@@ -54,15 +56,32 @@ object DebeziumAvroSchemaExport {
     schema.refresh(jdbcConnection, false)
 
     val avroData = new AvroData(new AvroDataConfig(config.asMap()))
+    val subjectNameStrategy = new TopicNameStrategy
 
     for (tid <- schema.tableIds().asScala) {
-      val avroKeySchema =
+      val keySchema =
         avroData.fromConnectSchema(schema.schemaFor(tid).keySchema())
-      println(avroKeySchema.toString(false))
 
-      val avroValueSchema =
+      println(
+        subjectNameStrategy.subjectName(
+          topicSelector.topicNameFor(tid),
+          true,
+          new AvroSchema(keySchema)
+        )
+      )
+      println(keySchema.toString(false))
+
+      val valueSchema =
         avroData.fromConnectSchema(schema.schemaFor(tid).valueSchema())
-      println(avroValueSchema.toString(false))
+
+      println(
+        subjectNameStrategy.subjectName(
+          topicSelector.topicNameFor(tid),
+          false,
+          new AvroSchema(valueSchema)
+        )
+      )
+      println(valueSchema.toString(false))
     }
   }
 
